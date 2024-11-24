@@ -25,7 +25,7 @@ public class simuladorViajeInterplanetario {
             System.out.println("|3. Programa tu viaje                 |");
             System.out.println("|4. Salir                             |");
             System.out.println("|_____________________________________|");
-            System.out.print("Elige una opción");
+            System.out.print("Elige una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
     
@@ -62,7 +62,7 @@ public class simuladorViajeInterplanetario {
         System.out.println("Presione ENTER para volver al Menú principal");
         scanner.nextLine();
         //Se crea esta opcion para que el usuario vea los planetas y las naves disponibles antes de elegir la opcion
-        //que mas le guste
+        //que mas le guste y pueda regresar al menú presionando <ENTER>
     }
         
 }
