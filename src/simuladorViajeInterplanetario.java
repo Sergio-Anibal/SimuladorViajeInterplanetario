@@ -15,7 +15,7 @@ public class simuladorViajeInterplanetario{
         mostrarMenu(scanner);
         scanner.close();
     }
-
+    //
     private static void cargarListas() {
         planetas.add(new Planeta("MERCURIO", "Es el planeta más pequeño y cercano al Sol", 92));
         planetas.add(new Planeta("VENUS", "El segundo planeta del sistema solar y el más caluroso", 61));
@@ -25,11 +25,11 @@ public class simuladorViajeInterplanetario{
         planetas.add(new Planeta("URANO", "El gigante de hielo con una rotación de 90°", 2721));
         planetas.add(new Planeta("NEPTUNO", "El planeta más lejano del Sol con una atmósfera rica en metano", 4496));
 
-        naves.add(new Naves("PARKER", 692000, 100000, 100));
-        naves.add(new Naves("VOYAGER", 615000, 90000, 90));
-        naves.add(new Naves("HELIOS", 252792, 80000, 80));
-        naves.add(new Naves("CASSINI", 158272, 70000, 70));
-        naves.add(new Naves("PIONEER", 54000, 60000, 60));
+        naves.add(new Naves("PARKER", 6920000, 1000000, 1000));
+        naves.add(new Naves("VOYAGER", 6150000, 900000, 900));
+        naves.add(new Naves("HELIOS", 2527920, 800000, 800));
+        naves.add(new Naves("CASSINI", 1582720, 700000, 700));
+        naves.add(new Naves("PIONEER", 540000, 600000, 600));
     }
 
     private static void mostrarMenu(Scanner scanner) {
@@ -56,7 +56,7 @@ public class simuladorViajeInterplanetario{
                 case 1 -> verDestinos();
                 case 2 -> verNaves();
                 case 3 -> gestionarViaje(scanner);
-                case 4 -> System.out.println("¡Gracias por usar el simulador! ¡Buen viaje!");
+                case 4 -> System.out.println("¡Gracias por tu visita, ¡¡¡ TE ESPERAMOS PRONTO !!!");
                 default -> System.out.println("Opción no válida. Por favor elige una opción del 1 al 4.");
             }
 
@@ -67,7 +67,7 @@ public class simuladorViajeInterplanetario{
     }
 
     private static void presionarEnterParaContinuar(Scanner scanner) {
-        System.out.println("Presiona ENTER para volver al menú principal.");
+        System.out.println("------Presiona ENTER para volver al menú principal.------");
         scanner.nextLine();
     }
 
@@ -87,13 +87,28 @@ public class simuladorViajeInterplanetario{
 
     private static void gestionarViaje(Scanner scanner) {
         System.out.println("\n****** GESTIONA TU VIAJE ******");
+        //Aqui selecciona el planeta al que se desea ir
         Planeta destino = seleccionarDestino(scanner);
         if (destino == null) return;
 
+        //Aqui se selecciona la nave
         Naves nave = seleccionarNave(scanner);
+        scanner.nextLine();
         if (nave == null) return;
 
+        //Confirmacion del usuario para iniciar viaje
+        System.out.println("\nHas elegido");
+        System.out.println("El: " + destino);
+        System.out.println("La: " + nave);
+        System.out.println("Para confirmar inicio de viaje presiona (Y), para cancelar oprime cualquier tecla");
+        String Confirmacion = scanner.nextLine().trim().toUpperCase(); //Metodo usado para eliminar espacios y convertir minuscula a Mayuscula
+
+        if(Confirmacion.equals("Y")){
         iniciarViaje(destino, nave);
+        } else{
+            System.out.println("Viaje cancelado");
+        }
+
     }
 
     private static Planeta seleccionarDestino(Scanner scanner) {
@@ -101,11 +116,21 @@ public class simuladorViajeInterplanetario{
         for (int i = 0; i < planetas.size(); i++) {
             System.out.println((i + 1) + ". " + planetas.get(i));
         }
-        System.out.print("Elige un destino (1-" + planetas.size() + "): ");
-        int indice = scanner.nextInt() - 1;
-        if (indice < 0 || indice >= planetas.size()) {
-            System.out.println("Opción inválida.");
-            return null;
+        int indice = -1;
+        while(indice < 0 || indice >= planetas.size()){
+            System.out.print("Elige el planeta al cual desear ir: " );
+            while (!scanner.hasNextInt()) {//Esta opcion sirve para que para que el usuario no ingrese otro valor que no sea númerico
+                System.out.println("Por favor ingresa una opción valida!!!");
+                scanner.next();
+                
+                }
+            indice = scanner.nextInt() - 1;
+
+            if (indice < 0 || indice >= planetas.size()) {
+                System.out.println("Opción inválida.");
+            }
+
+                  
         }
         return planetas.get(indice);
     }
@@ -115,11 +140,20 @@ public class simuladorViajeInterplanetario{
         for (int i = 0; i < naves.size(); i++) {
             System.out.println((i + 1) + ". " + naves.get(i));
         }
-        System.out.print("Elige una nave (1-" + naves.size() + "): ");
-        int indice = scanner.nextInt() - 1;
-        if (indice < 0 || indice >= naves.size()) {
-            System.out.println("Opción inválida.");
-            return null;
+        int indice = -1;
+        while (indice < 0 || indice >= naves.size()) {
+            System.out.print("Elige una nave (1-" + naves.size() + "): ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Por favor ingresa una opción valida!!!");
+                scanner.next();
+                
+            }
+            indice = scanner.nextInt() - 1;
+
+            if (indice < 0 || indice >= naves.size()) {
+                System.out.println("Opción inválida.");
+            }
+
         }
         return naves.get(indice);
     }
@@ -138,16 +172,17 @@ public class simuladorViajeInterplanetario{
         while (distanciaRecorrida < distancia) {
             distanciaRecorrida += nave.getVelocidad();
             oxigeno -= 1;
-            combustible -= 500;
+            combustible -= 100;
 
-            if (random.nextInt(100) < 10) {
+            if (random.nextInt(100) < 5) {
                 System.out.println("\n****** ¡ALERTA! ******");
                 System.out.println("¡Lluvia de asteroides detectada! Desviando la nave...");
-                combustible -= 500;
+                combustible -= 100;
                 oxigeno -= 1;
             }
-
+            // Formula que calcula el preoceso
             double progreso = (distanciaRecorrida / distancia) * 100;
+            //Mensaje enviado al usuario del pregreso y estado de recursos
             System.out.printf("Progreso: %d%% | Oxígeno: %d | Combustible: %d%n", Math.round(progreso), oxigeno, combustible);
 
             if (combustible <= 0 || oxigeno <= 0) {
@@ -211,6 +246,6 @@ class Naves {
 
     @Override
     public String toString() {
-        return "Nave: " + nombre + ". Velocidad Máxima: " + velocidad + " KM/H, Capacidad de combustible: " + combustible + " galones, Capacidad de Oxígeno: " + oxigeno + " litros";
+        return "Nave: " + nombre + ". Velocidad: " + velocidad + " KM/H, Capacidad de combustible: " + combustible + " galones, Oxígeno: " + oxigeno + " toneladas";
     }
 }
