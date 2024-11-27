@@ -10,13 +10,13 @@ public class simuladorViajeInterplanetario{
     private static Random random = new Random();
 
     public static void main(String[] args) {
-        cargarListas();
+        cargarListas();//Metodo crado para cargar las listas de planetas y naves
         var scanner = new Scanner(System.in);
         mostrarMenu(scanner);
         scanner.close();
-    }
-    //
+    }  
     private static void cargarListas() {
+        //Lista de plantas que se van a mostrar en las opciones 1 y 3
         planetas.add(new Planeta("MERCURIO", "Es el planeta más pequeño y cercano al Sol", 92));
         planetas.add(new Planeta("VENUS", "El segundo planeta del sistema solar y el más caluroso", 61));
         planetas.add(new Planeta("MARTE", "Conocido como el planeta rojo y el más cercano a nuestra Tierra", 55));
@@ -25,6 +25,7 @@ public class simuladorViajeInterplanetario{
         planetas.add(new Planeta("URANO", "El gigante de hielo con una rotación de 90°", 2721));
         planetas.add(new Planeta("NEPTUNO", "El planeta más lejano del Sol con una atmósfera rica en metano", 4496));
 
+        //Lista de naves que se van a mostrar en las opciones 2 y 3
         naves.add(new Naves("PARKER", 6920000, 1000000, 1000));
         naves.add(new Naves("VOYAGER", 6150000, 900000, 900));
         naves.add(new Naves("HELIOS", 2527920, 800000, 800));
@@ -34,7 +35,7 @@ public class simuladorViajeInterplanetario{
 
     private static void mostrarMenu(Scanner scanner) {
         int opcion;
-        do {
+        do {//Menu de opciones que vera el usuario
             System.out.println("\n|*************************************|");
             System.out.println("|--------- BIENVENIDO VIAJERO --------|");
             System.out.println("|*************************************|");
@@ -89,17 +90,15 @@ public class simuladorViajeInterplanetario{
         System.out.println("\n****** GESTIONA TU VIAJE ******");
         //Aqui selecciona el planeta al que se desea ir
         Planeta destino = seleccionarDestino(scanner);
-        if (destino == null) return;
-
+        
         //Aqui se selecciona la nave
         Naves nave = seleccionarNave(scanner);
-        scanner.nextLine();
-        if (nave == null) return;
-
+        scanner.nextLine();//Limpia el buffer, por que quedaba el ENTER y siempre cancelaba el viaje en la opcion de confirmacion Y/N
+        
         //Confirmacion del usuario para iniciar viaje
         System.out.println("\nHas elegido");
-        System.out.println("El: " + destino);
-        System.out.println("La: " + nave);
+        System.out.println("El " + destino);
+        System.out.println("La " + nave);
         System.out.println("Para confirmar inicio de viaje presiona (Y), para cancelar oprime cualquier tecla");
         String Confirmacion = scanner.nextLine().trim().toUpperCase(); //Metodo usado para eliminar espacios y convertir minuscula a Mayuscula
 
@@ -142,7 +141,7 @@ public class simuladorViajeInterplanetario{
         }
         int indice = -1;
         while (indice < 0 || indice >= naves.size()) {
-            System.out.print("Elige una nave (1-" + naves.size() + "): ");
+            System.out.print("Elige una nave: ");
             while (!scanner.hasNextInt()) {
                 System.out.println("Por favor ingresa una opción valida!!!");
                 scanner.next();
@@ -157,9 +156,9 @@ public class simuladorViajeInterplanetario{
         }
         return naves.get(indice);
     }
-
+    //Metodo que simula el viaje
     private static void iniciarViaje(Planeta destino, Naves nave) {
-        double distancia = destino.getDistancia() * 1_000_000.0;
+        double distancia = destino.getDistancia() * 1_000_000.0;//Se multiplica por un millon por que los valores se tomaron sin incluir los millones de kilometros
         double tiempoTotalHoras = distancia / nave.getVelocidad();
         int oxigeno = nave.getOxigeno();
         int combustible = nave.getCombustible();
@@ -169,29 +168,93 @@ public class simuladorViajeInterplanetario{
         System.out.printf("Destino: %s | Distancia: %.0f km | Tiempo estimado: %.2f días%n",
                 destino.getNombre(), distancia, tiempoTotalHoras / 24);
 
+        Scanner scanner = new Scanner(System.in);
+
         while (distanciaRecorrida < distancia) {
             distanciaRecorrida += nave.getVelocidad();
             oxigeno -= 1;
             combustible -= 100;
 
-            if (random.nextInt(100) < 5) {
+            //Lista de eventos aleatorios(Lluvia de asteorides)
+            if (random.nextInt(100) < 1) {
                 System.out.println("\n****** ¡ALERTA! ******");
-                System.out.println("¡Lluvia de asteroides detectada! Desviando la nave...");
-                combustible -= 100;
-                oxigeno -= 1;
+                System.out.println("¡Lluvia de asteroides detectada!");
+                System.out.println("Elige una opción:");
+                System.out.println("1. Continuar rumbo y acelerar(Aumenta consumo de recursos)");
+                System.out.println("2. Tomar un desvío (Es mas seguro pero aumenta el tiempo de llegada)");
+
+                int opcion = scanner.nextInt();
+                if (opcion == 1) {
+                    combustible -= 300;
+                    oxigeno -= 3; 
+                    System.out.println("Elegiste continuar. ¡¡TEN MUCHO CUIDADO!!");
+                }else{
+                    distanciaRecorrida -= nave.getVelocidad() * 0.10; //Retraso del 10%
+                    System.out.println("Decidiste tomar un desvío, aunque se retrasa un poco el tiempo es más seguro");
+                }
+                
+            }//Lista de eventos aleatorios (tormenta solar)
+            if (random.nextInt(100) < 2) {
+                System.out.println("\n****** ¡ALERTA! ******");
+                System.out.println("¡Tormenta Solar detectada!");
+                System.out.println("Elige una opción:");
+                System.out.println("1. Continuar rumbo y acelerar(Aumenta consumo de recursos)");
+                System.out.println("2. Tomar un desvío (Es mas seguro pero aumenta el tiempo de llegada)");
+                int opcion = scanner.nextInt();
+
+                if (opcion == 1) {
+                    combustible -= 200;
+                    oxigeno -= 2; 
+                    System.out.println("Elegiste continuar. ¡¡TEN MUCHO CUIDADO!!");
+                }else{
+                    distanciaRecorrida -= nave.getVelocidad() * 0.05; //Retraso del 5%
+                    System.out.println("Decidiste tomar un desvío, aunque se retrasa un poco el tiempo es más seguro");
+                }
+            }if (random.nextInt(100) < 2) {
+                System.out.println("\n****** ¡ALERTA! ******");
+                System.out.println("¡Sistema de navegacion averiado!");
+                System.out.println("Elige una opción:");
+                System.out.println("1. Reparar el sistema (Aumenta consumo de recursos)");
+                System.out.println("2. Continuar sin reparar (Riesgo de fallo futuro)");
+                int opcion = scanner.nextInt();
+
+                if (opcion == 1) {
+                    oxigeno -= 2; 
+                    distanciaRecorrida -= nave.getVelocidad() * 0.05; //Retraso del 5%
+                    System.out.println("Falla corregida, puedes continuar sin fallas");
+                }else{
+                    
+                    System.out.println("Decidiste continuar. ¡Riesgo de no terminar el viaje");
+                }
             }
-            // Formula que calcula el preoceso
+
+            // Formula que calcula el progreso
             double progreso = (distanciaRecorrida / distancia) * 100;
             //Mensaje enviado al usuario del pregreso y estado de recursos
-            System.out.printf("Progreso: %d%% | Oxígeno: %d | Combustible: %d%n", Math.round(progreso), oxigeno, combustible);
+            System.out.printf("Progreso: %d%% | Oxígeno: %d | Combustible: %d%n", Math.round(progreso), oxigeno, combustible);//Se utiliza Math.round para aproximar los decimales
 
             if (combustible <= 0 || oxigeno <= 0) {
+                System.out.println("\n****** ¡ALERTA! ******");
                 System.out.println("¡Recursos insuficientes! El viaje no puede continuar.");
-                return;
+                System.out.println("Elige una opción:");
+                System.out.println("1. Recargar recursos (Añadir +1000 combustible + 10 oxígeno)");
+                System.out.println("2. Finalizar viaje");
+                int opcion = scanner.nextInt();
+
+                if (opcion == 1) {
+                    combustible += 1000;
+                    oxigeno += 10;
+                    System.out.println("Excelente!! Haz recargado recursos. Continua el viaje");
+                } else{
+                    System.out.println("Es una lástima no llegar al destino. Hasta pronto!!!");
+                    return;
+                }
+                
             }
         }
 
         System.out.println("\n***** ¡HAS LLEGADO A TU DESTINO! *****");
+        return;
     }
 }
 class Planeta {
@@ -204,15 +267,15 @@ class Planeta {
         this.descripcion = descripcion;
         this.distancia = distancia;
     }
-
     public String getNombre() {
         return nombre;
     }
-
+    public String getDescipcion(){
+        return descripcion;
+    }
     public int getDistancia() {
         return distancia;
     }
-
     @Override
     public String toString() {
         return "Planeta: " + nombre + ". " + descripcion + " y se encuentra a " + distancia + " millones de kilómetros de la Tierra.";
@@ -231,19 +294,15 @@ class Naves {
         this.combustible = combustible;
         this.oxigeno = oxigeno;
     }
-
     public int getVelocidad() {
         return velocidad;
     }
-
     public int getCombustible() {
         return combustible;
     }
-
     public int getOxigeno() {
         return oxigeno;
     }
-
     @Override
     public String toString() {
         return "Nave: " + nombre + ". Velocidad: " + velocidad + " KM/H, Capacidad de combustible: " + combustible + " galones, Oxígeno: " + oxigeno + " toneladas";
