@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+
+//Realizado por Sergio Andres Anibal. Módulo 1 DEV SENIOR
 public class simuladorViajeInterplanetario{
 
     private static List<Planeta> planetas = new ArrayList<>();
@@ -10,13 +12,13 @@ public class simuladorViajeInterplanetario{
     private static Random random = new Random();
 
     public static void main(String[] args) {
-        cargarListas();//Metodo crado para cargar las listas de planetas y naves
+        cargarListas();//Metodo creado para cargar las listas de planetas y naves
         var scanner = new Scanner(System.in);
         mostrarMenu(scanner);
         scanner.close();
     }  
     private static void cargarListas() {
-        //Lista de plantas que se van a mostrar en las opciones 1 y 3
+        //Lista de planetas que se van a mostrar en las opciones 1 y 3
         planetas.add(new Planeta("MERCURIO", "Es el planeta más pequeño y cercano al Sol", 92));
         planetas.add(new Planeta("VENUS", "El segundo planeta del sistema solar y el más caluroso", 61));
         planetas.add(new Planeta("MARTE", "Conocido como el planeta rojo y el más cercano a nuestra Tierra", 55));
@@ -69,16 +71,16 @@ public class simuladorViajeInterplanetario{
 
     private static void presionarEnterParaContinuar(Scanner scanner) {
         System.out.println("------Presiona ENTER para volver al menú principal.------");
-        scanner.nextLine();
+        scanner.nextLine();//Método creado para regresar de las opciones 1 y 2 ya que solo se requiere ver las listas de naves y planetas
     }
-
+        //Método para llamar la lista planetas y el usuario vea los planetas disponibles
     private static void verDestinos() {
         System.out.println("\n***** DESTINOS DISPONIBLES *****");
         for (Planeta planeta : planetas) {
             System.out.println(planeta);
         }
     }
-
+        //Método para llamar la lista naves y el usuario pueda ver las naves disponibles
     private static void verNaves() {
         System.out.println("\n***** NAVES DISPONIBLES *****");
         for (Naves nave : naves) {
@@ -109,7 +111,7 @@ public class simuladorViajeInterplanetario{
         }
 
     }
-
+        //Metodo qye le permite escoger al usuario el planeta destino
     private static Planeta seleccionarDestino(Scanner scanner) {
         System.out.println("\n****** SELECCIONA TU DESTINO ******");
         for (int i = 0; i < planetas.size(); i++) {
@@ -133,7 +135,7 @@ public class simuladorViajeInterplanetario{
         }
         return planetas.get(indice);
     }
-
+        //Metodo que le permite al usuario elegir la nave para su viaje
     private static Naves seleccionarNave(Scanner scanner) {
         System.out.println("\n****** SELECCIONA TU NAVE ******");
         for (int i = 0; i < naves.size(); i++) {
@@ -175,7 +177,7 @@ public class simuladorViajeInterplanetario{
             oxigeno -= 1;
             combustible -= 100;
 
-            //Lista de eventos aleatorios(Lluvia de asteorides)
+            //Evento aleatorio(Lluvia de asteorides)
             if (random.nextInt(100) < 1) {
                 System.out.println("\n****** ¡ALERTA! ******");
                 System.out.println("¡Lluvia de asteroides detectada!");
@@ -193,8 +195,8 @@ public class simuladorViajeInterplanetario{
                     System.out.println("Decidiste tomar un desvío, aunque se retrasa un poco el tiempo es más seguro");
                 }
                 
-            }//Lista de eventos aleatorios (tormenta solar)
-            if (random.nextInt(100) < 2) {
+            }//Evento aleatorio (tormenta solar)
+            if (random.nextInt(100) < 1) {
                 System.out.println("\n****** ¡ALERTA! ******");
                 System.out.println("¡Tormenta Solar detectada!");
                 System.out.println("Elige una opción:");
@@ -210,7 +212,8 @@ public class simuladorViajeInterplanetario{
                     distanciaRecorrida -= nave.getVelocidad() * 0.05; //Retraso del 5%
                     System.out.println("Decidiste tomar un desvío, aunque se retrasa un poco el tiempo es más seguro");
                 }
-            }if (random.nextInt(100) < 2) {
+                //Evento aleatorio falla en sistema de navegacion
+            }if (random.nextInt(100) < 1) {
                 System.out.println("\n****** ¡ALERTA! ******");
                 System.out.println("¡Sistema de navegacion averiado!");
                 System.out.println("Elige una opción:");
@@ -243,7 +246,7 @@ public class simuladorViajeInterplanetario{
 
                 if (opcion == 1) {
                     combustible += 1000;
-                    oxigeno += 10;
+                    oxigeno += 100;
                     System.out.println("Excelente!! Haz recargado recursos. Continua el viaje");
                 } else{
                     System.out.println("Es una lástima no llegar al destino. Hasta pronto!!!");
@@ -256,7 +259,7 @@ public class simuladorViajeInterplanetario{
         System.out.println("\n***** ¡HAS LLEGADO A TU DESTINO! *****");
         return;
     }
-}
+}//Clase planeta que permite realizar una breve descripcion del planeta y mostrar info al usuario
 class Planeta {
     private String nombre;
     private String descripcion;
@@ -281,7 +284,7 @@ class Planeta {
         return "Planeta: " + nombre + ". " + descripcion + " y se encuentra a " + distancia + " millones de kilómetros de la Tierra.";
     }
 }
-
+//Clase nave que permite almacenar una breve descripcion de las naves y compartirle info al usuario
 class Naves {
     private String nombre;
     private int velocidad;
